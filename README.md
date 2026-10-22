@@ -4,7 +4,7 @@ A hands-on JavaScript mastery project — concepts, exercises, and tasks coverin
 
 ## Purpose
 
-Work through every significant JavaScript concept with real exercises. Not a tutorial — a structured self-learning path with tasks you implement yourself.
+Work through every significant JavaScript concept with real exercises. Not a tutorial — a structured, AI-guided learning path where tasks are assigned, your code is reviewed, and progress is tracked automatically.
 
 ## How to Use
 
@@ -17,6 +17,23 @@ cd js-mastery
 
 > **`main`** is a personal solutions branch. Don't copy from it — use it only as a reference after you've attempted a task yourself.
 
+### AI-Guided Learning (Kiro)
+
+This repo is designed to be used with [Kiro](https://kiro.dev) — an AI agent that reads the steering file and guides you through the curriculum interactively.
+
+1. Install Kiro and open this folder as your workspace
+2. `.kiro/steering/learning-path.md` automatically instructs the agent on how to teach, assign tasks, review your code, and track progress
+3. Start a session and say **"get ready"** — the agent will read `PLAN.md`, find where you are, and begin
+
+The agent will:
+- Explain every concept before assigning tasks
+- Review your code and give targeted feedback
+- Never write the solution for you
+- Update `NOTES.md` and `CHEATSHEET.md` as you complete topics
+- Track progress in `PLAN.md`
+
+> You can use any AI agent that supports custom instructions — point it at `.kiro/steering/learning-path.md` to load the curriculum behavior.
+
 ## Structure
 
 ```
@@ -28,19 +45,12 @@ js-mastery/
 │   ├── 04-advanced/      — proxy, symbols, modules, regex, WeakMap
 │   ├── 05-patterns/      — module pattern, observer, factory, decorator
 │   └── 06-performance/   — debounce, throttle, memoize, memory management
+├── .kiro/steering/
+│   └── learning-path.md  — AI agent curriculum instructions
 ├── PLAN.md               — full topic list + progress tracker
-├── NOTES.md              — detailed concepts, mental models, Q&A
-└── CHEATSHEET.md         — quick reference syntax and patterns
+├── NOTES.md              — detailed concepts, mental models, Q&A (agent-maintained)
+└── CHEATSHEET.md         — quick reference syntax and patterns (agent-maintained)
 ```
-
-## Workflow
-
-1. Pick the next unchecked topic in `PLAN.md`
-2. Read the concept, understand the goal
-3. Create the file under the right `concepts/` subfolder
-4. Complete the tasks — no copy-paste
-5. Append your learnings to `NOTES.md` and `CHEATSHEET.md`
-6. Check it off in `PLAN.md`
 
 ## Resources
 
