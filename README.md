@@ -57,3 +57,49 @@ js-mastery/
 - [MDN JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
 - [javascript.info](https://javascript.info) — best free structured JS resource
 - [You Don't Know JS (book series)](https://github.com/getify/You-Dont-Know-JS)
+
+## With AI vs Without AI
+
+This repo works in both modes. Here's what you get with each:
+
+### With AI (Kiro or any agent)
+
+| What the agent does | Benefit |
+|---------------------|---------|
+| Explains every concept before assigning tasks | You understand the why, not just the syntax |
+| Assigns tasks one level at a time | Prevents overwhelm, ensures progression |
+| Reviews your code and gives targeted feedback | Catches gaps you wouldn't catch yourself |
+| Asks output questions and gotcha drills for 🎯 topics | Interview-ready, not just "I read it" |
+| Updates NOTES.md and CHEATSHEET.md automatically | Zero friction documentation |
+
+**Best for:** active learning sessions where you want to be guided, challenged, and reviewed.
+
+### Without AI (self-guided)
+
+Every topic in `PLAN.md` includes:
+- A full list of subtopics and edge cases to cover
+- `_Resources:_` links pointing directly to the best material for that topic
+- `_Interview:_` notes flagging what interviewers actually ask
+
+You learn from the linked resources, write code in `concepts/`, fill `NOTES.md` and `CHEATSHEET.md` yourself, and use `PLAN.md` as a checklist to make sure you don't miss anything.
+
+**Best for:** learners who prefer picking their own resources and pace, or those without an AI setup.
+
+### Tradeoffs
+
+| | With AI | Without AI |
+|---|---------|------------|
+| Concept explanations | Generated dynamically, adapts to your questions | You read external resources |
+| Tasks | Assigned progressively, reviewed before moving on | Listed in PLAN.md — self-assigned and self-verified |
+| Code review | Immediate, targeted feedback per attempt | None — you verify against expected output yourself |
+| NOTES / CHEATSHEET | Agent fills them in | You fill them in |
+| Pace | Controlled — can't skip | Self-directed — easy to skip |
+| Interview prep | Agent drills output questions and polyfills | You need to seek out practice questions separately |
+
+Both paths produce the same end result if followed honestly. The AI path just removes the friction of finding resources, structuring practice, and self-reviewing.
+
+## Resources
+
+- [MDN JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference)
+- [javascript.info](https://javascript.info) — best free structured JS resource
+- [You Don't Know JS (book series)](https://github.com/getify/You-Dont-Know-JS)
