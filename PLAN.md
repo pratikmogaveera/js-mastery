@@ -111,12 +111,12 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: predict variable lookup in nested functions_
   - _Resources: [javascript.info/closure](https://javascript.info/closure) · [YDKJS — Scope & Closures](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/README.md)_
 
-- [x] **Closures** 🎯
+- [ ] **Closures** 🎯
   - Lexical scope retention, private state, factory functions
   - _Interview: closure in loops (`var` vs `let`), private counter, memoize_
   - _Resources: [javascript.info/closure](https://javascript.info/closure) · [MDN — Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)_
-  - [x] makeAdder
-  - [x] makeCounter
+  - [ ] makeAdder
+  - [ ] makeCounter
   - [ ] once
   - [ ] memoize
 
