@@ -117,3 +117,28 @@ argArrays.map(args => fn.apply(null, args))
 **call** — args known, pass individually
 **apply** — args in array, pass as-is
 **null as context** — when fn doesn't use `this` (Math.max, Math.min etc.)
+
+## bind
+
+```js
+fn.bind(ctx)              // lock this, invoke later
+fn.bind(ctx, arg1)        // lock this + pre-fill arg1
+fn.bind(null, arg1)       // partial application only, no this
+
+// Fix callback
+setTimeout(obj.method.bind(obj), 100)
+
+// Partial application
+const double = multiply.bind(null, 2)
+double(5)  // 10
+
+// bindAll — lock multiple methods at once
+function bindAll(obj, methods) {
+    for (const method of methods) obj[method] = obj[method].bind(obj)
+}
+```
+
+**call vs apply vs bind:**
+- `call` → invoke now, args individually
+- `apply` → invoke now, args as array
+- `bind` → invoke later, returns new fn

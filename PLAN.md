@@ -139,8 +139,9 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - [x] call — L2 (toArray, array-like conversion)
   - [x] apply — L3 (createLogger, dynamic args)
   - [x] Extra practice (runForAll, applyAll, getType)
-  - [ ] bind — basic task
-  - [ ] bind — harder task
+  - [x] bind — basic task (fix lost this in setTimeout callback)
+  - [x] bind — L2 (partial application — double/triple)
+  - [x] bind — L3 (bindAll)
 
 - [ ] **Currying & Partial Application** 🎯
   - Transforming multi-arg functions, `fn.length`, recursive accumulation

@@ -260,3 +260,77 @@ Math.max.apply(null, [5, 2, 8])  // 8
 // null because Math.max doesn't use `this`
 // modern equivalent: Math.max(...[5, 2, 8])
 ```
+
+## bind
+
+### Concept
+
+`bind` returns a **new function** with `this` permanently locked. Unlike `call`/`apply`, it does not invoke immediately.
+
+```js
+fn.call(ctx, arg)    // invokes now
+fn.apply(ctx, [arg]) // invokes now
+fn.bind(ctx, arg)    // returns new function — invokes later
+```
+
+Think of `bind` as: *"give me a version of this function that always uses this `this`."*
+
+### The callback problem
+
+When a method is passed as a callback, it detaches from its object and loses `this`:
+
+```js
+setTimeout(obj.greet, 100)              // this = global — broken
+setTimeout(obj.greet.bind(obj), 100)    // this = obj — fixed permanently
+```
+
+### Partial application
+
+`bind` can pre-fill arguments in addition to `this`. Pass `null` as context when `this` isn't needed:
+
+```js
+function multiply(a, b) { return a * b }
+
+const double = multiply.bind(null, 2)   // a = 2, permanently
+double(5)  // 10
+double(8)  // 16
+```
+
+### Patterns
+
+```js
+// Fix detached method — this permanently locked
+const incr = counter.increment.bind(counter)
+incr()  // this = counter, always
+
+// Partial application
+const double = multiply.bind(null, 2)
+
+// bindAll — bind multiple methods at once
+function bindAll(obj, methods) {
+    for (const method of methods) {
+        obj[method] = obj[method].bind(obj)
+    }
+}
+bindAll(timer, ['increment', 'decrement', 'value'])
+const { increment } = timer  // still works — this is locked
+```
+
+### call vs apply vs bind
+
+| | Invokes | Args |
+|---|---------|------|
+| `call` | Immediately | Individually |
+| `apply` | Immediately | As array |
+| `bind` | Later (returns fn) | Pre-filled or at call time |
+
+### Q&A
+
+**Why `null` as context in `multiply.bind(null, 2)`?**
+`multiply` doesn't use `this` — we only want partial application. `null` signals "no specific `this` needed."
+
+**Does `bind` create a new function every time?**
+Yes — each `bind` call returns a new function object. Be aware of this in performance-sensitive code (e.g., inside render loops in React).
+
+**Can you bind an already-bound function?**
+Yes, but the first `bind` wins. A bound function's `this` cannot be overridden by a second `bind`, `call`, or `apply`.

@@ -39,6 +39,11 @@ incr_v2()                       // undefined — increment itself still loses th
 // v3 — bind (fix for detached method — revisit after learning bind)
 // ─────────────────────────────────────────────
 
-// const counter_v3 = { count: 1, increment: function () { console.log(this.count) } }
-// const incr_v3 = counter_v3.increment.bind(counter_v3)
-// incr_v3()  // 1 — this permanently locked to counter_v3
+const counter_v3 = {
+  count: 1,
+  increment: function () {
+    console.log(this.count)
+  }
+}
+const incr_v3 = counter_v3.increment.bind(counter_v3)
+incr_v3()  // 1 — this permanently locked to counter_v3
