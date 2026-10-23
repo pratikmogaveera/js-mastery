@@ -129,7 +129,35 @@ Never update `NOTES.md` or `CHEATSHEET.md` mid-topic. Only after the topic is fu
 
 ---
 
-## File Roles (Quick Reference)
+## File Formatting (concepts/**)
+
+Every `.js` file in `concepts/` must follow this structure consistently:
+
+```js
+// ─────────────────────────────────────────────
+// Section or task name
+// ─────────────────────────────────────────────
+
+// ... implementation ...
+
+console.log('section name -----')
+// ... test calls with inline comments showing expected output ...
+```
+
+**Rules:**
+- Each task or logical group gets its own separator block
+- Separator line: `// ─────────────────────────────────────────────` (use actual `─` characters, not dashes)
+- Section title comment directly below the separator
+- `console.log('label -----')` before test calls — keeps output scannable when running the file
+- Inline comments on test calls showing expected output: `// 8` or `// undefined — default binding`
+- No quoted object keys — use `{ count: 1 }` not `{ "count": 1 }`
+- No trailing semicolons unless the user's style already has them
+
+Enforce this when reviewing any concept file. Flag deviations before approving.
+
+---
+
+
 
 | File | Who writes it | When |
 |------|--------------|------|

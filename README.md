@@ -11,7 +11,7 @@ Work through every significant JavaScript concept with real exercises. Not a tut
 > **If you're here to start your own learning journey**, clone the `starting-point` branch — it has the full roadmap with no solutions, so you start fresh:
 
 ```bash
-git clone -b starting-point https://github.com/<username>/js-mastery.git
+git clone -b starting-point https://github.com/pratikmogaveera/js-mastery.git
 cd js-mastery
 ```
 

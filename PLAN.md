@@ -117,22 +117,30 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Resources: [javascript.info/closure](https://javascript.info/closure) · [MDN — Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)_
   - [x] makeAdder
   - [x] makeCounter
-  - [ ] once
-  - [ ] memoize
+  - [x] once
+  - [x] memoize
 
-- [ ] **`this` keyword** 🎯
+- [x] **`this` keyword** 🎯
   - How `this` is determined — call site, implicit binding, explicit binding, `new`, arrow functions
   - `this` in callbacks, event handlers, class methods
   - _Interview: output questions on `this`, lost `this` in callbacks_
   - _Resources: [javascript.info/object-methods](https://javascript.info/object-methods) · [YDKJS — this & Object Prototypes](https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/this%20%26%20object%20prototypes/README.md)_
+  - [x] v1 — implicit binding + lost `this` when detached
+  - [x] v2 — arrow function fix for nested `this`
+  - [x] v3 — bind placeholder (revisit after bind)
 
-- [ ] **call, apply, bind** 🎯
+- [x] **call, apply, bind** 🎯
   - Explicit `this` binding, method borrowing, partial application
   - `call` vs `apply` vs `bind` — when to use which
   - _Interview: implement `Function.prototype.bind` from scratch (see Section 7 — Polyfills)_
   - _Resources: [javascript.info/call-apply-decorators](https://javascript.info/call-apply-decorators) · [javascript.info/bind](https://javascript.info/bind) · [MDN — bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)_
-  - [ ] Basic task
-  - [ ] Harder task
+  - [x] call — basic (method borrowing)
+  - [x] apply — basic (args from array)
+  - [x] call — L2 (toArray, array-like conversion)
+  - [x] apply — L3 (createLogger, dynamic args)
+  - [x] Extra practice (runForAll, applyAll, getType)
+  - [ ] bind — basic task
+  - [ ] bind — harder task
 
 - [ ] **Currying & Partial Application** 🎯
   - Transforming multi-arg functions, `fn.length`, recursive accumulation
