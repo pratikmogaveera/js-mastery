@@ -142,3 +142,33 @@ function bindAll(obj, methods) {
 - `call` → invoke now, args individually
 - `apply` → invoke now, args as array
 - `bind` → invoke later, returns new fn
+
+## Currying & Partial Application
+
+```js
+// curry — supports all partial application patterns
+function curry(fn) {
+  return function check(...args) {
+    if (args.length >= fn.length) return fn(...args)
+    return check.bind(null, ...args)
+  }
+}
+
+// usage
+const curriedAdd = curry((a, b, c) => a + b + c)
+const add10 = curriedAdd(10)       // partial
+add10(5, 3)                        // 18
+
+// pipe — chain functions left to right
+function pipe(...funcs) {
+  return (val) => { for (const fn of funcs) val = fn(val); return val }
+}
+
+pipe(x => x * 2, x => x + 1)(3)  // 3→6→7
+```
+
+**Key rules:**
+- Named inner function — enables self-reference for recursion
+- `>=` not `===` — handles excess args
+- `check.bind` not `fn.bind` — keeps check logic alive
+- `fn.length` — number of declared params

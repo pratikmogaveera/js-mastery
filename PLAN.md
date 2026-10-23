@@ -143,12 +143,13 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - [x] bind — L2 (partial application — double/triple)
   - [x] bind — L3 (bindAll)
 
-- [ ] **Currying & Partial Application** 🎯
+- [x] **Currying & Partial Application** 🎯
   - Transforming multi-arg functions, `fn.length`, recursive accumulation
   - _Interview: implement `curry()` supporting all partial application patterns_
   - _Resources: [javascript.info/currying-partials](https://javascript.info/currying-partials)_
-  - [ ] curry() implementation
-  - [ ] Harder task
+  - [x] curry() implementation
+  - [x] L2 — specialised functions via partial application
+  - [x] L3 — pipe()
 
 - [ ] **Prototypes & Prototype Chain** 🎯
   - `[[Prototype]]`, `Object.create`, `__proto__`, `prototype` property

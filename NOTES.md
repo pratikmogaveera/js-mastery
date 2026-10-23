@@ -334,3 +334,72 @@ Yes — each `bind` call returns a new function object. Be aware of this in perf
 
 **Can you bind an already-bound function?**
 Yes, but the first `bind` wins. A bound function's `this` cannot be overridden by a second `bind`, `call`, or `apply`.
+
+## Currying & Partial Application
+
+### Concept
+
+Currying transforms a function so that when called with **fewer arguments than expected**, it **returns a new function with those arguments pre-filled**. This repeats until all arguments are collected, at which point the **original function executes**.
+
+```js
+curriedJoin(1, 2, 3)  // all args at once — executes
+curriedJoin(1)(2, 3)  // partial → partial → executes
+curriedJoin(1, 2)(3)  // partial → executes
+curriedJoin(1)(2)(3)  // partial → partial → executes
+```
+
+**Partial application** is the practical benefit — pre-fill some arguments to create specialised, reusable functions:
+
+```js
+const add10 = curry((a, b, c) => a + b + c)(10)
+add10(5, 3)  // 18
+add10(1, 2)  // 13
+```
+
+### Implementation
+
+```js
+function curry(fn) {
+  return function check(...args) {
+    if (args.length >= fn.length) return fn(...args)
+    else return check.bind(null, ...args)
+  }
+}
+```
+
+**Why named inner function (`check`)?**
+The inner function must reference itself to keep the "enough args?" check alive on every call. Anonymous functions can't self-reference. `fn.bind` was the wrong approach — it binds the original function, losing the check entirely.
+
+**Why `>=` not `===`?**
+If someone passes more args than expected, `===` would fail and return another function instead of executing. `>=` handles both exact and excess args correctly.
+
+**`fn.length`** — number of declared parameters. Used to know how many args the original function expects.
+
+### pipe
+
+`pipe` chains functions left to right — output of each becomes input of the next:
+
+```js
+function pipe(...funcs) {
+  return function execute(val) {
+    for (const func of funcs)
+      val = func(val)
+    return val
+  }
+}
+
+pipe(x => x * 2, x => x + 1, x => x * x)(3)  // 3→6→7→49
+```
+
+Idiomatic version uses `reduce` (covered later):
+```js
+const pipe = (...fns) => val => fns.reduce((acc, fn) => fn(acc), val)
+```
+
+### Q&A
+
+**Why `check.bind` and not `fn.bind`?**
+`fn.bind(null, ...args)` returns a partially-applied version of `fn` — no check logic. `check.bind(null, ...args)` returns a partially-applied version of the curried wrapper — check logic survives every subsequent call.
+
+**What's the difference between currying and partial application?**
+Currying is the transformation (one arg at a time, strictly). Partial application is pre-filling *some* args (not necessarily one at a time). `curry()` enables both — you can call with any number of args at each step.
