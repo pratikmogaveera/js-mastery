@@ -172,3 +172,38 @@ pipe(x => x * 2, x => x + 1)(3)  // 3→6→7
 - `>=` not `===` — handles excess args
 - `check.bind` not `fn.bind` — keeps check logic alive
 - `fn.length` — number of declared params
+
+## Scope & Lexical Environment
+
+```js
+// Scope chain — looks outward until found or ReferenceError
+function outer() {
+    const x = 1
+    function inner() { console.log(x) }  // sees x — lexical scope
+    inner()  // 1
+}
+
+// var (function-scoped) vs let (block-scoped)
+function fn() {
+    if (true) {
+        var a = 1   // leaks into fn()
+        let b = 2   // stays in block
+    }
+    console.log(a)  // 1
+    console.log(b)  // ReferenceError
+}
+
+// var in loops gotcha
+for (var i = 0; i < 3; i++) setTimeout(() => console.log(i), 0)  // 3, 3, 3
+for (let i = 0; i < 3; i++) setTimeout(() => console.log(i), 0)  // 0, 1, 2
+
+// IIFE — isolated scope
+(function () { var x = 'private' })()  // x not accessible outside
+```
+
+**Key rules:**
+- Lexical scope: defined by where written, not where called
+- Scope chain: outward only — inner sees outer, never reverse
+- `var` hoists declaration (not value), initialised as `undefined`
+- `let`/`const` hoisted but not initialised — TDZ until declaration line
+- `var` loop bug: one shared variable → all callbacks see final value

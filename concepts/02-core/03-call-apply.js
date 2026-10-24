@@ -77,11 +77,11 @@ const describe = function () {
 }
 
 runForAll(describe, [
-  { name: 'Pratik', role: 'user' },
+  { name: 'Joe', role: 'user' },
   { name: 'Admin', role: 'admin' },
   { name: 'Guest', role: 'guest' },
 ])
-// Pratik is a user
+// Joe is a user
 // Admin is a admin
 // Guest is a guest
 

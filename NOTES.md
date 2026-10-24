@@ -211,7 +211,7 @@ fn.apply(thisArg, [arg1, arg2])   // args passed as an array
 Use a method from one object on another without copying it:
 
 ```js
-const user = { name: 'Pratik', role: 'user', describe() { console.log(`${this.name} - ${this.role}`) } }
+const user = { name: 'Joe', role: 'user', describe() { console.log(`${this.name} - ${this.role}`) } }
 const admin = { name: 'Admin', role: 'admin' }
 
 user.describe.call(admin)   // Admin - admin
@@ -403,3 +403,101 @@ const pipe = (...fns) => val => fns.reduce((acc, fn) => fn(acc), val)
 
 **What's the difference between currying and partial application?**
 Currying is the transformation (one arg at a time, strictly). Partial application is pre-filling *some* args (not necessarily one at a time). `curry()` enables both — you can call with any number of args at each step.
+
+## Scope & Lexical Environment
+
+### Concept
+
+Scope is the set of rules that determines where a variable is accessible. JS has three kinds:
+
+- **Global scope** — visible everywhere
+- **Function scope** — only inside the function it's declared in
+- **Block scope** — only inside the block `{}` it's declared in (`let`/`const`)
+
+**Lexical scope** — a function's scope is determined by **where it is written**, not where it is called. The scope chain only goes outward — inner functions see outer variables, never the reverse.
+
+**Scope chain** — when a variable is referenced, JS looks in the current scope first, then the outer scope, then the outer-outer scope, up to global. Stops at the first match. If not found anywhere: `ReferenceError`.
+
+**Execution context** — created every time a function is called. Holds local variables and a link to the outer scope. Normally destroyed when the function returns — kept alive by closures when an inner function holds a reference to it.
+
+### var vs let/const scoping
+
+`var` is **function-scoped** — leaks out of blocks (`if`, `for`, etc.) into the enclosing function.
+`let`/`const` are **block-scoped** — contained within the `{}` they're declared in.
+
+```js
+function fn() {
+    if (true) {
+        var x = 1   // function-scoped — accessible anywhere in fn()
+        let y = 2   // block-scoped — only inside this if block
+    }
+    console.log(x)  // 1 ✓
+    console.log(y)  // ReferenceError ✗
+}
+```
+
+### Hoisting
+
+`var` declarations are moved to the top of their function scope before execution. The declaration hoists, not the value:
+
+```js
+console.log(a)  // undefined — declared but not yet assigned
+var a = 5
+console.log(a)  // 5
+```
+
+`let`/`const` are also hoisted but **not initialised** — accessing them before the declaration line throws a `ReferenceError`. This period is the **Temporal Dead Zone (TDZ)**.
+
+Why hoist `let`/`const` at all? So JS can detect the variable belongs to the current block and reject lookups before initialization — instead of silently walking up the scope chain and returning the wrong value.
+
+### var in loops — classic gotcha
+
+```js
+for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 0)  // 3, 3, 3
+}
+```
+
+`var` is function-scoped — there's **one shared `i`**. All callbacks close over the same variable. By the time they run, `i` is already `3`.
+
+Fix with `let` — block-scoped, each iteration gets its own `i`:
+```js
+for (let i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 0)  // 0, 1, 2
+}
+```
+
+### IIFE fix (pre-let solution)
+
+Before `let` existed, an IIFE inside the loop created a new scope per iteration, capturing the current value:
+
+```js
+for (var i = 0; i < 3; i++) {
+    (function(j) {
+        setTimeout(() => console.log(j), 0)  // 0, 1, 2
+    })(i)
+}
+```
+
+`i` is passed as `j` — `j` is a new variable local to each IIFE call. Each callback closes over its own `j`, not the shared `i`.
+
+### IIFE — Module Pattern (historical)
+
+Before ES modules, IIFE was used to create private scope and avoid global variable collisions across script files:
+
+```js
+var MyModule = (function () {
+    var private = 'hidden'
+    return { greet: function () { console.log(private) } }
+})()
+```
+
+Replaced by ES modules (`import`/`export`) in modern JS. Still seen in legacy codebases and jQuery-era code.
+
+### Q&A
+
+**Why does `second()` called from inside `first()` not see `first()`'s variables?**
+Lexical scope — `second` is defined at global level. Its scope is determined by where it's written, not where it's called from. Calling it from `first()` doesn't give it access to `first()`'s variables.
+
+**Why does `makeCounter` remember state across calls?**
+Each call creates a new execution context. The returned function keeps a reference to it, preventing it from being destroyed. This is the mechanism behind closures — a function keeping its outer execution context alive.
