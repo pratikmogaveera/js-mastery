@@ -501,3 +501,178 @@ Lexical scope — `second` is defined at global level. Its scope is determined b
 
 **Why does `makeCounter` remember state across calls?**
 Each call creates a new execution context. The returned function keeps a reference to it, preventing it from being destroyed. This is the mechanism behind closures — a function keeping its outer execution context alive.
+
+## Prototypes & Prototype Chain
+
+### Concept
+
+Every object in JS has an internal `[[Prototype]]` link pointing to another object. When you look up a property and it's not found on the object itself, JS follows the chain — up through `[[Prototype]]` after `[[Prototype]]` — until found or the chain ends at `null`.
+
+```
+instance
+  └── [[Prototype]] → Constructor.prototype
+                         └── [[Prototype]] → Object.prototype
+                                               └── [[Prototype]] → null
+```
+
+This is how method sharing works — methods live on `Constructor.prototype`, shared by all instances. No copying.
+
+### `new` keyword — what it does
+
+1. Creates a new empty object `{}`
+2. Links its `[[Prototype]]` to `Constructor.prototype`
+3. Calls `Constructor` with `this = new object`
+4. Returns the new object
+
+```js
+function Person(name) { this.name = name }
+const p = new Person('Joe')
+// p.__proto__ === Person.prototype — true
+```
+
+### `prototype` vs `[[Prototype]]`
+
+- `Constructor.prototype` — the object that instances get linked to (a regular property on the function)
+- `[[Prototype]]` — the internal link on an instance (accessed via `Object.getPrototypeOf(obj)` or `obj.__proto__`)
+
+They're different things with similar names.
+
+### `hasOwnProperty`
+
+```js
+p1.hasOwnProperty('name')   // true  — name is on p1 directly
+p1.hasOwnProperty('greet')  // false — greet is on Person.prototype, not p1
+```
+
+### Walking the chain
+
+```js
+let proto = Object.getPrototypeOf(p1)
+while (proto !== null) {
+    console.log(proto)
+    proto = Object.getPrototypeOf(proto)
+}
+// Person.prototype → Object.prototype → (stops)
+```
+
+### Prototypal inheritance
+
+Link `Dog.prototype` to `Animal.prototype` using `Object.create` — not a copy, a live link:
+
+```js
+function Animal(name) { this.name = name }
+Animal.prototype.speak = function () { console.log(`${this.name} makes a sound.`) }
+
+function Dog(name) {
+    Animal.call(this, name)  // borrow constructor
+}
+Dog.prototype = Object.create(Animal.prototype)  // link prototype chain
+Dog.prototype.bark = function () { console.log(`${this.name} barks.`) }
+
+const d = new Dog('Rex')
+d.speak()  // inherited from Animal.prototype
+d.bark()   // Dog's own method
+```
+
+`Animal.call(this, name)` — runs Animal's constructor with `this = new Dog instance`. Sets `name` without a second property assignment.
+
+`Object.create(Animal.prototype)` — creates new object whose `[[Prototype]]` is `Animal.prototype`. Link, not copy.
+
+### Q&A
+
+**What's the difference between `Object.create(Animal.prototype)` and copying Animal's methods?**
+`Object.create` creates a link — changes to `Animal.prototype` after the fact still affect `Dog`. A copy would be a snapshot — disconnected.
+
+**Why use `Animal.call(this, name)` instead of `this.name = name` directly in Dog?**
+If `Animal` does more than set `name` (validation, other properties), you'd have to duplicate that logic in `Dog`. Borrowing the constructor means `Dog` always stays in sync with `Animal`'s initialization logic.
+
+**Why does `hasOwnProperty('greet')` return false?**
+`greet` lives on `Person.prototype`, not on the instance. `hasOwnProperty` only checks own properties — not anything in the prototype chain.
+
+## Classes & Inheritance
+
+### Concept
+
+`class` is syntactic sugar over the prototype system. Under the hood it creates the same constructor functions and prototype links — just with cleaner syntax.
+
+```js
+// These are equivalent:
+
+// Prototype way
+function Animal(name) { this.name = name }
+Animal.prototype.speak = function() { console.log(this.name) }
+
+// Class way
+class Animal {
+    constructor(name) { this.name = name }
+    speak() { console.log(this.name) }
+}
+```
+
+### extends and super
+
+`extends` sets up the prototype chain between classes — equivalent to `Dog.prototype = Object.create(Animal.prototype)`.
+
+`super` has two distinct uses:
+- In `constructor` — `super(name)` calls the parent constructor (equivalent to `Animal.call(this, name)`)
+- In any other method — `super.speak()` calls the parent's version of that method
+
+```js
+class Dog extends Animal {
+    constructor(name) {
+        super(name)       // must be called before accessing this
+    }
+
+    speak() {
+        super.speak()     // calls Animal's speak with this = Dog instance
+    }
+}
+```
+
+### Static methods
+
+`static` methods belong to the class itself, not instances. Called on the class, not on objects:
+
+```js
+class Animal {
+    static create(name) {
+        return new Animal(name)  // factory — creates instance without caller using new
+    }
+}
+
+Animal.create('Tom')  // ✓
+a1.create('Tom')      // ✗ — not on instances
+```
+
+### Private fields
+
+Declared with `#` — inaccessible outside the class, enforced at the language level:
+
+```js
+class Animal {
+    #sound                          // declaration required at class top level
+
+    constructor(name, sound) {
+        this.name = name
+        this.#sound = sound         // private — only accessible inside class
+    }
+
+    speak() {
+        console.log(`${this.#sound}`)  // ✓ inside class
+    }
+}
+
+a.#sound  // SyntaxError — not accessible outside
+a.sound   // undefined — no public property exists
+```
+
+### Q&A
+
+**Why must `super()` be called before `this` in a subclass constructor?**
+Until `super()` runs, `this` doesn't exist in the subclass — the parent constructor is responsible for creating the object. Accessing `this` before `super()` throws a ReferenceError.
+
+**What's the difference between static methods and prototype methods?**
+Prototype methods (`speak()`) are available on instances. Static methods (`Animal.create()`) are only available on the class itself — they're utility functions that relate to the class but don't need an instance.
+
+**Why use private fields over a naming convention like `_sound`?**
+`_sound` is just a convention — anyone can still access `obj._sound`. `#sound` is enforced by the language itself — accessing it outside the class throws a SyntaxError at parse time.

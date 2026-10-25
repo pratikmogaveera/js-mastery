@@ -207,3 +207,61 @@ for (let i = 0; i < 3; i++) setTimeout(() => console.log(i), 0)  // 0, 1, 2
 - `var` hoists declaration (not value), initialised as `undefined`
 - `let`/`const` hoisted but not initialised — TDZ until declaration line
 - `var` loop bug: one shared variable → all callbacks see final value
+
+## Prototypes & Prototype Chain
+
+```js
+// Add method to prototype — shared by all instances
+Constructor.prototype.method = function () { ... }
+
+// Check own vs inherited
+obj.hasOwnProperty('prop')   // true if on obj itself, false if on prototype
+
+// Walk the chain
+let proto = Object.getPrototypeOf(obj)
+while (proto !== null) { proto = Object.getPrototypeOf(proto) }
+
+// Prototypal inheritance
+function Dog(name) { Animal.call(this, name) }         // borrow constructor
+Dog.prototype = Object.create(Animal.prototype)         // link chain
+Dog.prototype.bark = function () { ... }                // Dog-specific method
+```
+
+**Chain:** `instance → Constructor.prototype → Object.prototype → null`
+
+**Key distinctions:**
+- `Constructor.prototype` — where methods live (on the function)
+- `[[Prototype]]` — the link on instances (access via `Object.getPrototypeOf`)
+- `Object.create` — link, not copy
+- `hasOwnProperty` — own properties only, ignores prototype chain
+
+## Classes & Inheritance
+
+```js
+class Animal {
+    #sound                               // private field — class top level
+    constructor(name, sound) {
+        this.name = name
+        this.#sound = sound
+    }
+    speak() { console.log(this.#sound) } // private access inside class
+    static create(name) { return new Animal(name) }  // factory method
+}
+
+class Dog extends Animal {
+    constructor(name) { super(name) }    // call parent constructor first
+    speak() { super.speak() }           // call parent method
+    bark() { console.log(`${this.name} barks.`) }
+}
+
+// Usage
+const a = Animal.create('Tom')          // static — no new needed
+const d = new Dog('Rex')
+d.speak()   // inherited
+d.bark()    // own method
+// a.#sound  → SyntaxError
+```
+
+**super:** `super()` in constructor = parent constructor. `super.method()` = parent method.
+**static:** on class, not instances.
+**#field:** enforced private — SyntaxError if accessed outside class.

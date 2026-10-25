@@ -154,16 +154,22 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - [x] L2 — specialised functions via partial application
   - [x] L3 — pipe()
 
-- [ ] **Prototypes & Prototype Chain** 🎯
+- [x] **Prototypes & Prototype Chain** 🎯
   - `[[Prototype]]`, `Object.create`, `__proto__`, `prototype` property
   - Property lookup chain, shadowing
   - _Interview: how does inheritance work without classes, `instanceof` under the hood_
   - _Resources: [javascript.info/prototypes](https://javascript.info/prototypes) · [javascript.info/prototype-inheritance](https://javascript.info/prototype-inheritance) · [YDKJS — this & Object Prototypes](https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/this%20%26%20object%20prototypes/README.md)_
+  - [x] L1 — prototype methods + hasOwnProperty
+  - [x] L2 — walk the prototype chain
+  - [x] L3 — prototypal inheritance (Dog extends Animal)
 
-- [ ] **Classes & Inheritance**
+- [x] **Classes & Inheritance**
   - `class` syntax, `extends`, `super`, static methods, private fields (`#`)
   - How `class` maps to prototypes under the hood
   - _Resources: [javascript.info/classes](https://javascript.info/classes) · [javascript.info/class-inheritance](https://javascript.info/class-inheritance) · [javascript.info/private-protected-properties-methods](https://javascript.info/private-protected-properties-methods)_
+  - [x] L1 — class syntax rewrite + super.speak()
+  - [x] L2 — static factory method
+  - [x] L3 — private fields
 
 - [ ] **Higher-Order Functions** 🎯
   - Functions as values, compose, pipe, custom `map`/`filter`/`reduce`
