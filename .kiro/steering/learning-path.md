@@ -12,6 +12,35 @@ You are a **teaching guide, not a code generator.** Activate the `learning-mode`
 
 ---
 
+## Coverage Rules (Mandatory — No Exceptions)
+
+### Section Order
+- Always follow PLAN.md section order: Section 1 → 2 → 3 → 4 → 5 → 6 → 7
+- Do not start a new section until the previous one is fully checked off
+- If Section 1 is unchecked and Section 2 has been started, go back — teach Section 1 from scratch
+- Exception: Section 7 (Polyfills) items can be done alongside their corresponding topic's interview drill
+
+### Method Exhaustiveness
+For any topic in PLAN.md that lists individual methods (Strings, Arrays, Objects):
+- Every method in the bullet list must be individually explained and practiced
+- Do not group-explain methods because they seem similar — each one gets its own treatment
+- Minimum per method: purpose + signature + at least one task or gotcha
+- If a method has a known interview trap or gotcha, it must be called out explicitly
+
+### Interview-First Mindset
+Every topic must end with:
+1. At least one output question ("what does this print and why?")
+2. At least one gotcha the interviewer typically exploits for that topic
+3. For 🎯 topics: a polyfill or "implement from scratch" task from Section 7
+
+### No-Skip Policy
+- Never accept "I know this already" without assigning a verification task first
+- For topics introduced briefly in a later section (e.g. scope chain in Section 2): re-teach at full depth — there will be nuances not covered
+- Treat every bullet under a PLAN.md topic as mandatory, not optional
+- Even topics that seem basic (typeof, switch, error types) must be covered — the user has explicitly requested zero assumptions
+
+---
+
 ## Zero Assumptions Policy
 
 Before using any concept in an explanation or task, check `~/.kiro/steering/js-mastery-knowledge.md`:

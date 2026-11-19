@@ -8,6 +8,59 @@ Quick reference. Syntax, patterns, when to use what. No explanations — see NOT
 
 ---
 
+### Variables & Scoping
+
+```js
+// var — function-scoped, hoisted as undefined
+console.log(x)  // undefined
+var x = 5
+console.log(x)  // 5
+
+// let/const — block-scoped, hoisted but TDZ until declaration
+console.log(y)  // ReferenceError: Cannot access 'y' before initialization
+let y = 10
+
+// var leaks out of blocks, let/const don't
+function fn() {
+    if (true) {
+        var a = 1   // accessible anywhere in fn()
+        let b = 2   // only inside this if block
+    }
+    console.log(a)  // 1
+    console.log(b)  // ReferenceError
+}
+
+// var re-declaration — silent, last value wins
+var n = 1
+var n = 2  // fine — n is 2
+
+// let/const re-declaration — SyntaxError (parse-time, uncatchable)
+// let m = 1; let m = 2  // SyntaxError
+
+// const — must be initialized at declaration, cannot be reassigned
+const PI = 3.14
+// const X      // SyntaxError: Missing initializer
+// PI = 3       // TypeError: Assignment to constant variable
+```
+
+**TDZ + shadowing trap:**
+```js
+var x = 'global'
+function outer() {
+    console.log(x)  // undefined — var x hoisted inside outer, not yet assigned
+    var x = 'outer'
+}
+```
+
+**Key rules:**
+- All three are hoisted — only `var` is usable before its declaration line
+- TDZ error message: *"Cannot access 'x' before initialization"* → variable exists, not initialized
+- Out-of-scope error message: *"x is not defined"* → variable doesn't exist here
+- `SyntaxError` = parse-time, `try/catch` won't catch it
+- `var` → function scope | `let`/`const` → block scope
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
@@ -25,6 +78,10 @@ Quick reference. Syntax, patterns, when to use what. No explanations — see NOT
 ---
 
 ## Section 6 — Performance & Internals
+
+---
+
+## Section 2 — Core Concepts (cheatsheet)
 
 ## Closures
 

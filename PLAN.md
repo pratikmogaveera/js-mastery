@@ -18,7 +18,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
 
 > Core language mechanics. Don't skim — even "basic" topics have methods and edge cases most developers haven't encountered. Tick off only what you know cold, including the edge cases listed.
 
-- [ ] **Variables & Scoping** 🎯
+- [x] **Variables & Scoping** 🎯
   - `var` vs `let` vs `const` — hoisting, temporal dead zone, re-declaration rules
   - Block scope vs function scope vs global scope
   - Scope chain — how JS resolves variable lookups

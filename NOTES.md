@@ -8,6 +8,64 @@ Detailed concepts, mental models, patterns, and Q&A. Appended after each complet
 
 ---
 
+### Variables & Scoping
+
+#### Concept
+
+Three keywords, three different scoping and hoisting behaviours:
+
+| | Scope | Hoisted? | Initialised at hoist? | Re-declare? | Reassign? |
+|---|---|---|---|---|---|
+| `var` | function | yes | yes → `undefined` | yes | yes |
+| `let` | block | yes | no → TDZ | no | yes |
+| `const` | block | yes | no → TDZ | no | no |
+
+**Hoisting** — JS scans a scope before executing it and registers all declarations upfront. `var` is registered AND initialised to `undefined`. `let`/`const` are registered but not initialised — the gap between registration and initialisation is the **Temporal Dead Zone (TDZ)**.
+
+**Why TDZ?** To prevent a silent bug. Without it, accessing a `let` before its declaration would silently walk up the scope chain and find something unexpected. TDZ makes it a loud `ReferenceError`.
+
+**Scope types:**
+- **Global** — declared outside any block or function, accessible everywhere
+- **Function** — `var` inside a function, accessible anywhere in that function
+- **Block** — `let`/`const` inside `{}`, only accessible within that block
+
+#### Gotchas
+
+**TDZ + shadowing trap (common interview question):**
+```js
+var x = 'global'
+function outer() {
+    console.log(x)  // undefined — NOT 'global'
+    var x = 'outer'
+}
+outer()
+```
+`var x = 'outer'` is hoisted inside `outer()`, shadowing the global `x`. At the time of `console.log`, it exists in scope but isn't assigned yet → `undefined`. If it were `let`, it'd be a `ReferenceError` (TDZ, not `undefined`).
+
+**SyntaxErrors are parse-time — `try/catch` won't help:**
+- `let a = 1; let a = 2` → `SyntaxError` at parse time
+- `const x` (no initializer) → `SyntaxError` at parse time
+- Neither can be caught at runtime with `try/catch`
+
+**`var` re-declaration is silent:**
+```js
+var a = 1
+var a = 2  // no error — a is now 2
+```
+
+#### Q&A
+
+**Why does `var` inside an `if` block leak out but `let` doesn't?**
+`var` is function-scoped — the `if` block's `{}` is not a new scope for `var`. `let`/`const` are block-scoped — any `{}` creates a new scope.
+
+**What's the difference between `ReferenceError: cannot access 'x' before initialization` and `ReferenceError: x is not defined`?**
+First = TDZ — the variable exists in this scope but hasn't been initialized yet. Second = the variable doesn't exist in this scope at all. Same error type, completely different cause.
+
+**If `let`/`const` are also hoisted, what's the practical difference from `var`?**
+Hoisting just means the engine knows about the variable before running code. The difference is what state it's in: `var` is immediately usable (as `undefined`), `let`/`const` are in TDZ and inaccessible until the declaration line.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
@@ -25,6 +83,10 @@ Detailed concepts, mental models, patterns, and Q&A. Appended after each complet
 ---
 
 ## Section 6 — Performance & Internals
+
+---
+
+## Section 2 — Core Concepts (notes)
 
 ## Closures
 
