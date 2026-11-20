@@ -61,9 +61,60 @@ function outer() {
 
 ---
 
-## Section 2 — Core Concepts
+### Data Types
+
+```js
+// typeof — know these cold
+typeof 'hi'         // 'string'
+typeof 42           // 'number'
+typeof true         // 'boolean'
+typeof undefined    // 'undefined'
+typeof null         // 'object' ← bug
+typeof {}           // 'object'
+typeof []           // 'object'
+typeof function(){} // 'function' ← special case
+typeof Symbol()     // 'symbol'
+typeof 42n          // 'bigint'
+
+// null check — typeof won't work
+value === null      // only reliable check
+
+// array check — typeof won't work
+arr instanceof Array                               // true/false
+Object.prototype.toString.call(v).slice(8,-1)      // 'Array', 'Null', 'String'...
+
+// primitive — copied by value (independent)
+let a = 5; let b = a; b = 10  // a still 5
+
+// object — copied by reference (shared)
+let x = { n: 1 }; let y = x; y.n = 2  // x.n is now 2
+
+// shallow copy — top-level independent, nested still shared
+let copy = { ...original }
+
+// explicit coercion
+Number('')          // 0
+Number('42')        // 42
+Number('abc')       // NaN
+Number(null)        // 0   — intentionally empty
+Number(undefined)   // NaN — unknown, no numeric equivalent
+Number(true)        // 1
+
+// + with strings — concatenation wins
+1 + '2'             // '12'
+2 + 3 + '4'         // '54' (left to right: 5, then '54')
+'4' + 2 + 3         // '423'
+3 - '2'             // 1   (- forces number coercion)
++'5'                // 5   (unary + coerces to number)
+```
+
+**Falsy:** `0` `''` `null` `undefined` `NaN` `false` — everything else truthy (including `'0'` `[]` `{}`)
+
+**`==` order:** boolean → number first, then string → number. `null` only `==` `undefined`.
 
 ---
+
+## Section 2 — Core Concepts---
 
 ## Section 3 — Async JavaScript
 

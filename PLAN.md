@@ -25,7 +25,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: output questions on hoisting, TDZ errors, `var` in loops_
   - _Resources: [javascript.info/variables](https://javascript.info/variables) · [javascript.info/var](https://javascript.info/var) · [MDN — Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)_
 
-- [ ] **Data Types** 🎯
+- [x] **Data Types** 🎯
   - Primitives (`string`, `number`, `bigint`, `boolean`, `null`, `undefined`, `symbol`) vs reference types
   - Type coercion — implicit (`==`, `+`, template literals) vs explicit (`Number()`, `String()`, `Boolean()`)
   - `typeof` quirks (`typeof null === 'object'`)

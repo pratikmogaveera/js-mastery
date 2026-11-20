@@ -66,6 +66,89 @@ Hoisting just means the engine knows about the variable before running code. The
 
 ---
 
+### Data Types
+
+#### Concept
+
+JS has 8 data types. 7 primitives, 1 reference type.
+
+**Primitives** — stored by value, copied independently:
+`string`, `number`, `bigint`, `boolean`, `null`, `undefined`, `symbol`
+
+**Reference type** — stored by reference (arrays, functions, dates are all objects):
+`object`
+
+Copying a primitive creates an independent value. Copying an object copies the reference — both variables point to the same thing in memory. Mutating one mutates the other.
+
+Shallow copy via spread or `Object.assign` fixes top-level properties but nested objects are still shared.
+
+#### typeof table
+
+| Value | `typeof` |
+|-------|----------|
+| `'hello'` | `'string'` |
+| `42` | `'number'` |
+| `true` | `'boolean'` |
+| `undefined` | `'undefined'` |
+| `null` | `'object'` ← bug |
+| `{}` or `[]` | `'object'` |
+| `function(){}` | `'function'` ← special case |
+| `Symbol()` | `'symbol'` |
+| `42n` | `'bigint'` |
+
+`typeof` is unreliable for `null` (returns `'object'`) and can't distinguish arrays from plain objects (both `'object'`).
+
+#### Reliable type checking
+
+```js
+value === null                                      // only way to check null
+value instanceof Array                             // distinguish array from object
+Object.prototype.toString.call(value).slice(8,-1)  // 'Null', 'Array', 'String', etc.
+```
+
+`Object.prototype.toString.call()` works because it uses the engine's internal type tag, bypassing any overridden `toString` methods. `null.toString()` would throw — `.call(null)` doesn't.
+
+#### Type coercion
+
+**Implicit** — JS converts automatically. **Explicit** — you do it manually (`Number()`, `String()`, `Boolean()`).
+
+`+` rules — if either operand is a string, the other is coerced to string (concatenation). Every other arithmetic operator coerces to number.
+
+```js
+2 + 3 + '4'   // '54' — left to right: 5 then '54'
+'4' + 2 + 3   // '423' — left to right: '42' then '423'
+3 - '2'       // 1 — string coerced to number
++'5'          // 5 — unary + coerces to number
+```
+
+**Falsy values:** `0`, `''`, `null`, `undefined`, `NaN`, `false` — everything else is truthy including `'0'`, `[]`, `{}`.
+
+**`==` coercion order:**
+1. boolean operand → convert to number first
+2. string vs number → convert string to number
+3. `null` only `==` `undefined` — does not follow the number conversion path
+
+**`Number()` gotchas:**
+```js
+Number('')         // 0
+Number('abc')      // NaN — failed conversion
+Number(null)       // 0   — null is intentionally empty
+Number(undefined)  // NaN — undefined is unknown, no numeric equivalent
+```
+
+#### Q&A
+
+**Why does `null == false` return `false` if null is falsy?**
+`==` doesn't convert both sides to boolean. It converts booleans to numbers first. `null` doesn't follow that path — `null` only loosely equals `undefined`. Falsy is a boolean concept; `==` has its own coercion rules.
+
+**Why does `typeof function(){}` return `'function'` and not `'object'`?**
+Functions are objects, but the spec gives them a special `typeof` result as a convenience. Useful in practice but technically inconsistent.
+
+**`Number(null)` → 0 but `Number(undefined)` → NaN — why?**
+`null` is deliberate emptiness → numeric equivalent is `0`. `undefined` is "unknown/never set" → no sensible numeric value → `NaN`.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
