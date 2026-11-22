@@ -33,7 +33,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: coercion gotchas (`[] + []`, `[] + {}`, `+[]`), `==` vs `===` edge cases_
   - _Resources: [javascript.info/types](https://javascript.info/types) · [javascript.info/type-conversions](https://javascript.info/type-conversions) · [javascript.info/comparison](https://javascript.info/comparison)_
 
-- [ ] **Operators**
+- [x] **Operators**
   - Logical: `&&`, `||`, `??` (nullish coalescing), `&&=`, `||=`, `??=`
   - Optional chaining: `?.`, `?.[`, `?.(`
   - Ternary, comma operator, `void`, `delete`, `in`

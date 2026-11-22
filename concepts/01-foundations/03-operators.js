@@ -98,3 +98,39 @@ try {
 console.log(user?.phone?.number) // undefined — phone doesn't exist, chain stops safely
 
 
+// ─────────────────────────────────────────────
+// ternary, delete, in, void, comma
+// ─────────────────────────────────────────────
+
+console.log('misc operators -----')
+const obj = {
+  a: true,
+  b: false,
+  c: 1,
+  d: 0,
+}
+
+// ternary — condition ? valueIfTrue : valueIfFalse
+console.log(obj.a ? 'Truthy' : 'Falsy') // 'Truthy'
+
+// delete — removes a property, returns true if successful
+delete obj.c
+console.log(obj) // { a: true, b: false, d: 0 }
+
+// in — checks own properties AND prototype chain
+console.log('a' in obj)         // true  — own property
+console.log('c' in obj)         // false — was deleted
+console.log('toString' in obj)  // true  — exists on Object.prototype (prototype chain)
+
+// void — always returns undefined regardless of expression
+console.log(void 0)             // undefined
+console.log(void 'anything')    // undefined
+
+// comma — evaluates left to right, returns last value
+const x = (0, 1, 2, 3)
+console.log(x)                  // 3
+
+// comma in for loop update slot — advance two counters simultaneously
+for (let i = 0, j = 10; i < 3; i++, j--) {
+  console.log(i, j)             // 0 10 / 1 9 / 2 8
+}

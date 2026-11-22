@@ -114,6 +114,46 @@ Number(true)        // 1
 
 ---
 
+### Operators
+
+```js
+// || — first truthy, or last if all falsy
+'a' || 'b'          // 'a'
+0 || 'default'      // 'default'
+
+// && — first falsy, or last if all truthy
+1 && 2 && 3         // 3
+0 && 'anything'     // 0
+
+// ?? — fallback only for null/undefined (not 0 or '')
+0 ?? 'default'      // 0   — 0 is kept
+null ?? 'default'   // 'default'
+
+// logical assignment
+x ||= 'default'     // assign if x is falsy
+x &&= transform(x)  // assign only if x is truthy (already exists)
+x ??= 'default'     // assign only if x is null/undefined
+
+// optional chaining
+obj?.prop           // undefined instead of TypeError
+obj?.['key']        // computed key
+obj?.method?.()     // method call
+
+// misc
+x > 0 ? 'pos' : 'neg'   // ternary
+delete obj.key            // removes property, returns true
+'key' in obj              // true if own or inherited
+void 0                    // undefined always
+const x = (1, 2, 3)      // 3 — comma operator, returns last
+for (let i=0, j=10; i<3; i++, j--) {} // comma in update slot
+```
+
+**`||` vs `??`:** use `??` for defaults when `0` or `''` are valid values.
+**`in`:** checks prototype chain too — `'toString' in {}` is `true`.
+**comma in `let i=0, j=0`:** declaration syntax, not comma operator.
+
+---
+
 ## Section 2 — Core Concepts---
 
 ## Section 3 — Async JavaScript

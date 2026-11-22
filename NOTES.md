@@ -149,6 +149,68 @@ Functions are objects, but the spec gives them a special `typeof` result as a co
 
 ---
 
+### Operators
+
+#### Logical operators
+
+`||`, `&&`, `??` don't return `true`/`false` — they return one of their operands.
+
+| Operator | Returns |
+|----------|---------|
+| `\|\|` | first truthy value, or last value if all falsy |
+| `&&` | first falsy value, or last value if all truthy |
+| `??` | right side only if left is `null` or `undefined` |
+
+**`||` vs `??` for default values:**
+Use `??` when `0` or `''` are valid values — `||` treats them as empty and replaces them. `??` only triggers for `null`/`undefined`.
+
+```js
+const age = 0
+age || 18    // 18 — wrong, 0 is valid
+age ?? 18    // 0  — correct
+```
+
+#### Logical assignment
+
+```js
+x ||= y   // assign if x is falsy
+x &&= y   // assign only if x is truthy
+x ??= y   // assign only if x is null/undefined
+```
+
+Real use: `&&=` to only update a value if it already exists. `??=` to set a default without overwriting falsy-but-valid values.
+
+#### Optional chaining
+
+```js
+obj?.prop        // property access
+obj?.['key']     // computed property access
+obj?.method?.()  // method call
+```
+
+Returns `undefined` instead of throwing `TypeError` when any part of the chain is `null`/`undefined`. Short-circuits — once `undefined` is hit, the rest of the chain is not evaluated.
+
+#### Misc operators
+
+- **ternary** — `condition ? a : b` — inline if/else
+- **`delete`** — removes a property from an object, returns `true`
+- **`in`** — checks if property exists on object OR its prototype chain
+- **`void`** — evaluates expression, always returns `undefined`
+- **comma** — evaluates left to right, returns last value. In `for` loop update slot: `i++, j--` runs both side effects. Init slot comma (`let i = 0, j = 10`) is declaration syntax, not the comma operator.
+
+#### Q&A
+
+**Why does `'toString' in obj` return true for a plain object?**
+`in` checks the full prototype chain, not just own properties. `toString` lives on `Object.prototype` which every plain object inherits from.
+
+**What's the difference between the comma in `let i=0, j=10` and `i++, j--`?**
+`let i=0, j=10` is variable declaration syntax — comma separates declarators. `i++, j--` is the comma operator — evaluates both expressions, returns last value. The for loop discards the return value and only uses the side effects.
+
+**When does `?.` short-circuit?**
+As soon as any part of the chain is `null` or `undefined`, the rest of the expression is not evaluated — it immediately returns `undefined`.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
