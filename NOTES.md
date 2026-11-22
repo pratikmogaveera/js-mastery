@@ -211,6 +211,61 @@ As soon as any part of the chain is `null` or `undefined`, the rest of the expre
 
 ---
 
+### Functions (in progress — L3 pending)
+
+#### Three ways to define a function
+
+| | Hoisting | `this` |
+|---|---|---|
+| Declaration | Fully hoisted (name + body) | Own `this`, determined at call time |
+| Expression (`const f = function(){}`) | Variable hoisted (TDZ if `let`/`const`, `undefined` if `var`), body is not | Own `this`, determined at call time |
+| Arrow (`const f = () => {}`) | Variable hoisted (TDZ if `let`/`const`), body is not | No own `this` — inherits from lexical scope |
+
+**Hoisting gotcha:** `var` expression hoists to `undefined` → calling it throws `TypeError: f is not a function`. `let`/`const` expression is in TDZ → calling it throws `ReferenceError`.
+
+#### Default parameters
+
+Only triggered by `undefined` — not by any other falsy value:
+```js
+function greet(name = 'Stranger') { return `Hello ${name}` }
+greet('')        // 'Hello '        — '' is not undefined
+greet(null)      // 'Hello null'    — null is not undefined
+greet(undefined) // 'Hello Stranger' — triggers default
+greet()          // 'Hello Stranger' — no arg = undefined
+```
+
+#### Rest parameters vs `arguments` object
+
+```js
+// rest — real array, works in arrow functions too
+function sum(...nums) { return nums.reduce((a, b) => a + b, 0) }
+
+// arguments — array-like object, regular functions only
+function old() { console.log(arguments) }  // Arguments { '0': ..., '1': ... }
+```
+
+Arrow functions have no own `arguments` — they inherit it from the nearest enclosing regular function's scope. In Node.js CJS files, the top-level scope IS a function (the module wrapper), so `arguments` resolves to Node's internal module args (`exports`, `require`, `module`, etc.) — not a ReferenceError.
+
+```js
+function outer(a, b) {
+  const arrow = () => console.log(arguments)  // logs outer's args, not arrow's
+  const withRest = (...args) => console.log(args) // logs arrow's actual args
+  arrow(99, 100)    // [Arguments] { '0': 1, '1': 2 } — outer's
+  withRest(99, 100) // [99, 100] — rest captures arrow's own call args
+}
+outer(1, 2)
+```
+
+#### Q&A
+
+**Why does `greet(null)` not use the default value?**
+Default parameters only activate for `undefined`. `null` is a deliberate value meaning "no value" — JS respects that choice and passes `null` through.
+
+**Why can't you use `arguments` in arrow functions?**
+Arrow functions have no own execution context — no own `this`, no own `arguments`. They borrow from the enclosing scope. Use rest params (`...args`) instead — they always capture the arrow's own call arguments.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---

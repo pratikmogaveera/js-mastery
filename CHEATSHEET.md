@@ -154,6 +154,49 @@ for (let i=0, j=10; i<3; i++, j--) {} // comma in update slot
 
 ---
 
+### Functions (in progress — L3 pending)
+
+```js
+// declaration — fully hoisted
+sayHi()  // works
+function sayHi() { console.log('hi') }
+
+// expression — var hoists as undefined → TypeError
+sayHello()  // TypeError: sayHello is not a function
+var sayHello = function() {}
+
+// expression — let/const → TDZ → ReferenceError
+greet()  // ReferenceError
+const greet = () => {}
+
+// default parameters — only undefined triggers the default
+function fn(x = 'default') {}
+fn()          // 'default'
+fn(undefined) // 'default'
+fn(null)      // null — does NOT trigger default
+fn('')        // '' — does NOT trigger default
+
+// rest parameters — real array, works everywhere
+function sum(...nums) { return nums.reduce((a, b) => a + b, 0) }
+
+// arguments object — regular functions only
+function old() { console.log(arguments) }  // Arguments { '0': ..., ... }
+const arrow = () => console.log(arguments) // inherits from enclosing scope
+
+// arrow arguments vs rest
+function outer(a, b) {
+  const arrow = () => console.log(arguments)      // outer's args
+  const withRest = (...args) => console.log(args) // arrow's own args
+}
+```
+
+**Rules:**
+- Default params: only `undefined` (and missing args) trigger the fallback
+- `arguments` → regular functions only. Use `...args` in arrows
+- Arrow at top level of Node.js CJS file: `arguments` resolves to module wrapper args
+
+---
+
 ## Section 2 — Core Concepts---
 
 ## Section 3 — Async JavaScript
