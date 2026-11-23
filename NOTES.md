@@ -313,6 +313,103 @@ Node.js wraps every CJS file in a module wrapper function. The arrow function's 
 
 ---
 
+### Strings
+
+#### Key rule — strings are immutable
+
+Every method returns a new string. The original is never modified.
+
+#### Search methods
+
+| Method | Returns | Notes |
+|--------|---------|-------|
+| `indexOf(str)` | index or `-1` | first occurrence |
+| `lastIndexOf(str)` | index or `-1` | last occurrence |
+| `includes(str)` | boolean | case-sensitive |
+| `startsWith(str)` | boolean | |
+| `endsWith(str)` | boolean | |
+
+**`indexOf` gotcha:** `-1` is truthy. `if (str.indexOf('x'))` is true even when `'x'` is not found. Always use `!== -1` or `includes()`.
+
+#### Extraction
+
+**`slice(start, end)`** — supports negative indices. Returns `''` if `start > end`.
+
+**`substring(start, end)`** — no negative indices (treated as 0). Swaps args if `start > end`.
+
+Prefer `slice` — more predictable.
+
+```js
+'abcdefgh'.slice(2, 5)      // 'cde'
+'abcdefgh'.slice(-3)        // 'fgh'
+'abcdefgh'.substring(-3)    // 'abcdefgh' — negative → 0
+'abcdefgh'.substring(5, 2)  // 'cde'      — args swapped
+'abcdefgh'.slice(5, 2)      // ''         — no swap, empty
+```
+
+#### Transformation
+
+```js
+'hello'.toUpperCase()       // 'HELLO'
+'  hello  '.trim()          // 'hello'
+'  hello  '.trimStart()     // 'hello  '
+'  hello  '.trimEnd()       // '  hello'
+'5'.padStart(3, '0')        // '005' — total length 3
+'42'.padStart(3, '0')       // '042'
+'999'.padStart(3, '0')      // '999' — already at length
+'ab'.repeat(3)              // 'ababab'
+```
+
+#### split / replace / replaceAll
+
+```js
+'a,b,c'.split(',')           // ['a', 'b', 'c']
+'abc'.split('')              // ['a', 'b', 'c']
+'abc'.split()                // ['abc']
+'aabbcc'.replace('b', 'X')   // 'aaXbcc'  — first only
+'aabbcc'.replace(/b/g, 'X')  // 'aaXXcc'
+'aabbcc'.replaceAll('b', 'X') // 'aaXXcc'
+```
+
+#### at(), template literals, matchAll()
+
+```js
+'hello'.at(-1)    // 'o'
+'hello'[-1]       // undefined — bracket notation doesn't support negatives
+
+`Hello ${name}`   // interpolation, any expression in ${}
+// multiline: backtick strings preserve line breaks
+
+// matchAll — full match objects with index and capture groups
+const matches = [...str.matchAll(/pattern/g)]
+matches[0][0]     // matched string
+matches[0].index  // position in original
+
+// positional capture groups
+const m = [...'cat bat'.matchAll(/([a-z])(at)/g)]
+m[0][1]  // 'c' — first group
+m[0][2]  // 'at' — second group
+
+// named capture groups — (?<name>...)
+const d = [...'2024-01-15'.matchAll(/(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/g)]
+d[0].groups.year   // '2024'
+d[0].groups.month  // '01'
+// groups has null prototype — intentional, avoids conflicts with built-in names
+```
+
+#### Q&A
+
+**Why does `if (str.indexOf('x'))` fail when `'x'` isn't in the string?**
+`indexOf` returns `-1` when not found. `-1` is truthy. The if-block runs. Use `str.indexOf('x') !== -1` or `str.includes('x')`.
+
+**`match(/g)` vs `matchAll()`?**
+`match` with `/g` returns matched strings only — no index, no groups. `matchAll` returns full match objects with index and capture groups. Use `matchAll` when position or groups matter.
+
+**Why prefer `slice` over `substring`?**
+`substring` silently treats negatives as 0 and swaps args when `start > end`. `slice` is explicit and predictable.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---

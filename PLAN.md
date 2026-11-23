@@ -48,7 +48,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: why arrow functions can't be used as constructors, `arguments` vs rest params_
   - _Resources: [javascript.info/function-basics](https://javascript.info/function-basics) · [javascript.info/function-expressions](https://javascript.info/function-expressions) · [javascript.info/arrow-functions](https://javascript.info/arrow-functions-basics)_
 
-- [ ] **Strings**
+- [x] **Strings**
   - Basics: `length`, `indexOf`, `lastIndexOf`, `includes`, `startsWith`, `endsWith`
   - Extraction: `slice`, `substring`
   - Transformation: `toUpperCase`, `toLowerCase`, `trim`, `trimStart`, `trimEnd`, `padStart`, `padEnd`, `repeat`
