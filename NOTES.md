@@ -211,7 +211,7 @@ As soon as any part of the chain is `null` or `undefined`, the rest of the expre
 
 ---
 
-### Functions (in progress — L3 pending)
+### Functions
 
 #### Three ways to define a function
 
@@ -263,6 +263,53 @@ Default parameters only activate for `undefined`. `null` is a deliberate value m
 
 **Why can't you use `arguments` in arrow functions?**
 Arrow functions have no own execution context — no own `this`, no own `arguments`. They borrow from the enclosing scope. Use rest params (`...args`) instead — they always capture the arrow's own call arguments.
+
+#### IIFE
+
+An Immediately Invoked Function Expression — defined and called in one shot. The outer `()` turns it into an expression (not a declaration), the trailing `()` calls it.
+
+```js
+const config = (function() {
+  const secret = 'hidden'  // not accessible outside
+  const version = '1.0'
+  return { theme: 'dark', version }  // only this is exposed
+})()
+
+console.log(config.theme) // 'dark'
+console.log(secret)       // ReferenceError
+```
+
+**Why use IIFE over a named function?**
+A named function also contains its variables — but the function name itself leaks into the outer scope. IIFE leaves nothing behind: no name, no reference, can't be accidentally called again. Self-documenting intent: "runs once, right now."
+
+Historical use: libraries wrapped entire codebases in IIFEs to contain internals and expose only one value (`jQuery`, `Lodash`, etc.). Today ES modules handle this naturally.
+
+**ASI trap:** a line ending without a semicolon followed by `(` — JS reads the `(` as a function call on the previous line's result. Always put a semicolon before an IIFE (or after the preceding statement) to avoid this.
+
+#### Why arrow functions can't be constructors
+
+`new Fn()` does four things:
+1. Creates a new empty object `{}`
+2. Links its `[[Prototype]]` to `Fn.prototype`
+3. Calls `Fn` with `this = new object`
+4. Returns the object
+
+Arrow functions fail at steps 2 and 3:
+- No `prototype` property → prototype chain link can't be established
+- No own `this` → properties have nowhere to be written
+
+**Interview answer:** Arrow functions have no own `this` and no `prototype` property. `new` requires both — it sets `this` to the new object so the constructor can write properties onto it, and uses `Fn.prototype` to establish the prototype chain. Without either, `new` throws `TypeError: X is not a constructor`.
+
+#### Q&A
+
+**Why does `greet(null)` not use the default value?**
+Default parameters only activate for `undefined`. `null` is a deliberate value meaning "no value" — JS respects that choice and passes `null` through.
+
+**Why can't you use `arguments` in arrow functions?**
+Arrow functions have no own execution context — no own `this`, no own `arguments`. They borrow from the enclosing scope. Use rest params (`...args`) instead — they always capture the arrow's own call arguments.
+
+**Arrow function at top level of a Node.js CJS file — why does `arguments` not throw?**
+Node.js wraps every CJS file in a module wrapper function. The arrow function's lexical scope IS that wrapper, which has its own `arguments` (`exports`, `require`, `module`, `__filename`, `__dirname`). So `arguments` resolves to the module wrapper's args, not a ReferenceError.
 
 ---
 

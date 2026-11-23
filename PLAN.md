@@ -40,7 +40,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - Operator precedence gotchas
   - _Resources: [javascript.info/logical-operators](https://javascript.info/logical-operators) · [javascript.info/nullish-coalescing-operator](https://javascript.info/nullish-coalescing-operator) · [javascript.info/optional-chaining](https://javascript.info/optional-chaining)_
 
-- [ ] **Functions** 🎯
+- [x] **Functions** 🎯
   - Declarations vs expressions vs arrow functions — hoisting differences
   - IIFE — why and when
   - Default parameters, rest parameters (`...args`), arguments object

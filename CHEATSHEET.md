@@ -195,6 +195,26 @@ function outer(a, b) {
 - `arguments` → regular functions only. Use `...args` in arrows
 - Arrow at top level of Node.js CJS file: `arguments` resolves to module wrapper args
 
+```js
+// IIFE — runs once, leaves nothing in scope
+const config = (function() {
+  const secret = 'hidden'  // trapped
+  return { theme: 'dark' } // exposed
+})()
+// console.log(secret)  // ReferenceError
+
+// constructor — regular function works, arrow throws
+function Person(name) { this.name = name }
+const p = new Person('Pratik')  // { name: 'Pratik' }
+
+const Arrow = (name) => { this.name = name }
+// new Arrow()  // TypeError: Arrow is not a constructor
+```
+
+**Arrow functions can't be constructors because:**
+1. No `prototype` property → can't set up prototype chain
+2. No own `this` → can't write properties onto new object
+
 ---
 
 ## Section 2 — Core Concepts---
