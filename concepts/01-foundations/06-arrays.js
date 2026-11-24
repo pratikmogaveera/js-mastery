@@ -174,3 +174,33 @@ for (const v of sequency.values())
 
 for (const [i, v] of sequency.entries())
   console.log(i, v)    // 0 1, 1 2, 2 3 — index + value pairs
+
+
+
+// ─────────────────────────────────────────────
+// destructuring, spread, rest in arrays
+// ─────────────────────────────────────────────
+
+console.log('destructuring / spread / rest -----')
+
+// destructuring — unpack by position
+const [a, b, c, d = 4] = [1, 2, 3]  // d gets default since index 3 is undefined
+console.log(a, b, c, d)              // 1 2 3 4
+
+// skip elements with empty comma
+const [first, , third] = [1, 2, 3]
+console.log(first, third)            // 1 3
+
+// swap without temp variable — classic interview trick
+let [p, q] = [0, 1];
+[p, q] = [q, p];
+console.log(p, q)                    // 1 0
+
+// spread — expand array into elements
+const merged = [...[0, 1], 2, ...[3, 4]]
+console.log(merged)                  // [0, 1, 2, 3, 4]
+console.log([...merged])             // [0, 1, 2, 3, 4] — shallow copy
+
+// rest in destructuring — collect remaining into array
+const [head, ...tail] = [1, 2, 3, 4]
+console.log(head, tail)              // 1 [2, 3, 4]

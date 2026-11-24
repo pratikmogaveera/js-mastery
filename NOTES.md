@@ -410,6 +410,75 @@ d[0].groups.month  // '01'
 
 ---
 
+### Arrays
+
+#### Mutating vs non-mutating
+
+**Mutating:** `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin`
+
+**Non-mutating:** `map`, `filter`, `reduce`, `find`, `findIndex`, `some`, `every`, `flat`, `flatMap`, `forEach`
+
+Gotcha: `sort` and `reverse` both mutate AND return the array.
+
+#### Key methods
+
+```js
+// mutation
+arr.push(v)             // add end, return new length
+arr.pop()               // remove end, return item
+arr.unshift(v)          // add start, return new length
+arr.shift()             // remove start, return item
+arr.splice(i, n, ...v)  // remove n from i, insert v, return removed
+
+// sort gotcha
+[10,9,2].sort()                // [10,2,9] — lexicographic
+[10,9,2].sort((a,b) => a-b)   // [2,9,10] — numeric
+
+// iteration
+arr.forEach(cb)   // undefined — side effects only
+arr.map(cb)       // new array, same length
+arr.filter(cb)    // new array, elements where cb is truthy
+arr.reduce((acc, curr) => ..., init)  // single value
+
+// search
+arr.find(cb)         // first element or undefined
+arr.findIndex(cb)    // first index or -1
+arr.findLast(cb)     // last element or undefined
+arr.includes(val)    // boolean (strict equality)
+arr.indexOf(val)     // index or -1 (fails for objects — use find)
+
+// test
+arr.some(cb)   // true if any pass | [].some(cb) → false
+arr.every(cb)  // true if all pass | [].every(cb) → true (vacuous)
+
+// flat
+arr.flat(depth)       // default depth 1
+arr.flatMap(cb)       // map then flat(1)
+
+// creation
+Array.from(iterable, mapFn?)  // from any iterable
+Array.of(3)                   // [3] (not 3 empty slots like new Array(3))
+Array.isArray(val)            // only reliable array check
+
+// access
+arr.at(-1)        // last element
+arr.entries()     // [index, value] pairs
+arr.keys()        // indices
+arr.values()      // values
+```
+
+#### Destructuring / spread / rest
+
+```js
+const [a, b = 2] = [1]      // defaults for missing
+const [h, ...t] = [1,2,3]   // rest: h=1, t=[2,3]
+const [x, , z] = [1,2,3]    // skip: x=1, z=3
+let [p, q] = [1,2]; [p,q] = [q,p]  // swap — ASI trap, need ; before [
+const merged = [...a, ...b]  // spread merge
+```
+
+---
+
 ## Section 2 — Core Concepts
 
 ---

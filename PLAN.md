@@ -58,7 +58,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - Newer: `at()`, `matchAll()`
   - _Resources: [javascript.info/string](https://javascript.info/string) · [MDN — String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)_
 
-- [ ] **Arrays** 🎯
+- [x] **Arrays** 🎯
   - Mutation methods: `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin`
   - Iteration methods: `forEach`, `map`, `filter`, `reduce`, `reduceRight`, `flatMap`
   - Search methods: `find`, `findIndex`, `findLast`, `findLastIndex`, `indexOf`, `lastIndexOf`, `includes`

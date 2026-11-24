@@ -154,7 +154,7 @@ for (let i=0, j=10; i<3; i++, j--) {} // comma in update slot
 
 ---
 
-### Functions (in progress — L3 pending)
+### Functions
 
 ```js
 // declaration — fully hoisted
@@ -214,6 +214,64 @@ const Arrow = (name) => { this.name = name }
 **Arrow functions can't be constructors because:**
 1. No `prototype` property → can't set up prototype chain
 2. No own `this` → can't write properties onto new object
+
+---
+
+### Arrays
+
+```js
+// mutation — modify original
+push(v)/pop()          // end: add/remove
+unshift(v)/shift()     // start: add/remove
+splice(i, n, ...v)     // remove n items at i, insert v
+
+// sort — always use comparator for numbers
+[10,2,1].sort()                // [1,10,2] lexicographic
+[10,2,1].sort((a,b) => a-b)   // [1,2,10] numeric asc
+[10,2,1].sort((a,b) => b-a)   // [10,2,1] numeric desc
+
+fill(val, start, end)   // fill slice with value
+reverse()               // reverses in place
+copyWithin(target, start, end)
+
+// iteration — non-mutating
+forEach(cb)             // undefined — side effects
+map(cb)                 // new array, same length
+filter(cb)              // new array, truthy only
+reduce((acc,curr)=>{}, init)
+reduceRight((acc,curr)=>{}, init)
+
+// search
+find(cb) / findLast(cb)              // element or undefined
+findIndex(cb) / findLastIndex(cb)    // index or -1
+includes(val) / indexOf(val)         // by value (strict =)
+// indexOf fails for objects — use find
+
+// test
+some(cb)   // ≥1 passes | [].some → false
+every(cb)  // all pass  | [].every → true (vacuous)
+
+// flat
+flat(depth)    // default 1 | Infinity for full
+flatMap(cb)    // map + flat(1)
+
+// creation
+Array.from(iterable, mapFn?)
+Array.of(3)        // [3] not 3 empty slots
+Array.isArray(v)   // only reliable array check
+
+// access
+at(-1) / entries() / keys() / values()
+```
+
+**Destructuring / spread / rest:**
+```js
+const [a, b=2] = [1]          // default
+const [h, ...t] = [1,2,3]     // rest
+const [x,,z] = [1,2,3]        // skip
+let [p,q]=[1,2]; [p,q]=[q,p]  // swap — ; before [ (ASI)
+const m = [...a, ...b]         // spread merge
+```
 
 ---
 
