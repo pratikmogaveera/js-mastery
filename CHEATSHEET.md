@@ -275,6 +275,33 @@ const m = [...a, ...b]         // spread merge
 
 ---
 
+### Objects (in progress)
+
+```js
+// literals
+const obj = { name, age }              // shorthand
+const obj2 = { [key]: 'value' }        // computed key
+const obj3 = { [`pre_${key}`]: 1 }     // computed with expression
+
+// access
+obj.name    // dot — static key
+obj[key]    // bracket — dynamic/variable key
+obj.key     // wrong — literal 'key', not variable value
+
+// keys / values / entries / fromEntries
+Object.keys(obj)     // ['name', 'age', ...]
+Object.values(obj)   // ['Joey', 26, ...]
+Object.entries(obj)  // [['name','Joey'], ['age',26], ...]
+Object.fromEntries(pairs)  // reverse — pairs → object
+
+// transform pattern
+Object.fromEntries(
+  Object.entries(obj).map(([k, v]) => [k, transform(v)])
+)
+```
+
+---
+
 ### Strings
 
 #### Key rule — strings are immutable

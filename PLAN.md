@@ -84,6 +84,18 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - `delete` operator
   - _Interview: deep clone an object, check if two objects are equal, flatten a nested object_
   - _Resources: [javascript.info/object](https://javascript.info/object) · [javascript.info/property-descriptors](https://javascript.info/property-descriptors) · [javascript.info/object-methods](https://javascript.info/object-methods)_
+  - Literals, shorthand properties, computed keys
+  - Access: dot vs bracket notation
+  - `Object.keys`, `Object.values`, `Object.entries`, `Object.fromEntries`
+  - Merging: `Object.assign`, spread
+  - Freezing: `Object.freeze`, `Object.seal` — differences
+  - Property descriptors: `Object.defineProperty`, `writable`, `enumerable`, `configurable`
+  - Getters and setters
+  - `Object.create(null)` — prototype-less objects
+  - `hasOwnProperty` vs `Object.hasOwn`
+  - `delete` operator
+  - _Interview: deep clone an object, check if two objects are equal, flatten a nested object_
+  - _Resources: [javascript.info/object](https://javascript.info/object) · [javascript.info/property-descriptors](https://javascript.info/property-descriptors) · [javascript.info/object-methods](https://javascript.info/object-methods)_
 
 - [ ] **Control Flow**
   - `for`, `for...of`, `for...in` — when to use which, gotchas with `for...in` on arrays
