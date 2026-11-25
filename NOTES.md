@@ -479,6 +479,47 @@ const merged = [...a, ...b]  // spread merge
 
 ---
 
+### Objects (in progress)
+
+#### Object literals
+
+```js
+const name = 'Pratik'
+const obj = { name }                   // shorthand — same as { name: name }
+const obj2 = { [key]: 'value' }        // computed key from variable
+const obj3 = { [`prefix_${key}`]: 1 }  // computed key with expression
+```
+
+#### Dot vs bracket notation
+
+```js
+obj.name     // static key — known at write time
+obj['name']  // bracket — same result
+obj[key]     // bracket — uses variable's value as key
+obj.key      // wrong — looks for literal property 'key', not variable value
+```
+
+Must use bracket: dynamic keys, keys stored in variables, numeric keys, keys with special characters.
+
+#### Object.keys / values / entries / fromEntries
+
+```js
+Object.keys(obj)    // array of own enumerable keys
+Object.values(obj)  // array of own enumerable values
+Object.entries(obj) // array of [key, value] pairs
+
+Object.fromEntries(pairs)  // [key, value] pairs → object (reverse of entries)
+```
+
+**Transform pattern:**
+```js
+const doubled = Object.fromEntries(
+  Object.entries({ a: 1, b: 2 }).map(([k, v]) => [k, v * 2])
+)  // { a: 2, b: 4 }
+```
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
