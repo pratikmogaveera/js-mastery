@@ -314,6 +314,28 @@ Object.defineProperty(obj, 'key', {
   enumerable: false,   // hidden from keys/spread/log
   configurable: false, // no delete/reconfigure
 })
+
+// getters and setters
+const rect = {
+  _w: 0, _h: 0,
+  set dimensions(v) { [this._w, this._h] = v.split(' ').map(Number) },
+  get area() { return this._w * this._h },
+  get perimeter() { return 2 * (this._w + this._h) },
+}
+rect.dimensions = '4 5'
+rect.area        // 20
+rect.perimeter   // 18
+
+// Object.create(null) — no prototype
+const dict = Object.create(null)
+dict.toString    // undefined — no inherited methods
+// dict.hasOwnProperty('key')  // TypeError
+Object.hasOwn(dict, 'key')     // safe on all objects
+
+// delete
+delete obj.key   // true — deleted
+delete obj.x     // true — key didn't exist (not false!)
+// non-configurable → false
 ```
 
 ---

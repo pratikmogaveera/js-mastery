@@ -104,3 +104,51 @@ delete protectedObject.user_id         // silently fails — configurable: false
 console.log(protectedObject.user_id)   // '3782-48329-4832-42834' — still exists, direct access works
 console.log(Object.keys(protectedObject)) // ['username', 'gender'] — user_id not enumerable
 console.log(protectedObject)           // { username: 'Joey', gender: 'Male' } — user_id hidden
+
+// ─────────────────────────────────────────────
+// getters and setters
+// get — computed property, called like a property read (no parentheses)
+// set — triggered by assignment, used for validation or derived updates
+// _prefix convention — internal property, use the getter/setter instead
+// ─────────────────────────────────────────────
+
+console.log('getters and setters -----')
+const rectangle = {
+  _width: 0,
+  _height: 0,
+  set dimensions(value) {
+    [this._height, this._width] = value.split(' ').map(item => Number(item))
+  },
+  get area() { return this._height * this._width },
+  get perimeter() { return 2 * (this._height + this._width) },
+}
+
+rectangle.dimensions = '4 5'
+console.log(`${rectangle.area} sq. units`)   // 20 sq. units
+console.log(`${rectangle.perimeter} units`)  // 18 units
+console.log(`${rectangle.area} sq. units`) // 20 sq. units
+console.log(`${rectangle.perimeter} units`) // 18 units
+
+
+// ─────────────────────────────────────────────
+// Object.create(null), hasOwnProperty vs hasOwn, delete
+// ─────────────────────────────────────────────
+
+console.log('create(null) / hasOwn / delete -----')
+
+// Object.create(null) — no prototype, no inherited methods
+const nullObj = Object.create(null)
+nullObj.name = 'Joey'
+console.log(nullObj.name, nullObj.toString)  // 'Joey', undefined — no toString
+// nullObj.hasOwnProperty('name')  // TypeError — method doesn't exist on null-prototype object
+console.log(Object.hasOwn(nullObj, 'name'))      // true  — static method, works on any object
+console.log(Object.hasOwn(nullObj, 'toString'))  // false — not a property
+
+// delete
+// returns true: property deleted | key didn't exist
+// returns false: property is non-configurable
+const delObject = { a: 1, b: 2 }
+Object.defineProperty(delObject, 'b', { configurable: false })
+console.log(delete delObject.a, delObject)  // true,  { b: 2 }   — deleted
+console.log(delete delObject.b, delObject)  // false, { b: 2 }   — non-configurable, stays
+console.log(delete delObject.c, delObject)  // true,  { b: 2 }   — key didn't exist, no error

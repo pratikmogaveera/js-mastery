@@ -558,11 +558,51 @@ Object.keys(obj)      // key not listed
 `freeze` = all flags false on every property.
 `seal` = configurable false on every property, writable unchanged.
 
----
+#### Getters and setters
+
+```js
+const obj = {
+  _x: 0,
+  _y: 0,
+  set coords(value) {
+    [this._x, this._y] = value.split(',').map(Number)
+  },
+  get coords() { return `${this._x}, ${this._y}` },
+}
+
+obj.coords = '3,4'   // triggers setter
+obj.coords           // triggers getter — '3, 4'
+```
+
+- `get` — called like a property read (no `()`)
+- `set` — triggered by assignment
+- `_prefix` — convention for internal properties, not enforced by language
+- Use `Object.defineProperty` to add getters/setters to existing objects too
+
+#### Object.create(null) / hasOwn / delete
+
+```js
+// Object.create(null) — no prototype chain
+const dict = Object.create(null)
+dict.key = 'value'
+dict.toString   // undefined — no prototype, no inherited methods
+// dict.hasOwnProperty('key')  // TypeError — doesn't exist on null-prototype
+
+// Object.hasOwn — works on all objects including null-prototype
+Object.hasOwn(obj, 'key')   // true/false
+// vs obj.hasOwnProperty('key') — fails on null-prototype, can be overridden
+
+// delete
+delete obj.key   // true  — deleted
+delete obj.x     // true  — key didn't exist, no error (not false!)
+// delete non-configurable → false (use defineProperty configurable: false to test)
+```
+
+**`delete` gotcha:** returns `true` for non-existent keys. `true` means "deletion didn't fail", not "a property was removed".
 
 ---
 
-## Section 3 — Async JavaScript
+## Section 2 — Core Concepts
 
 ---
 
