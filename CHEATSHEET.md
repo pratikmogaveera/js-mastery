@@ -275,7 +275,7 @@ const m = [...a, ...b]         // spread merge
 
 ---
 
-### Objects (in progress)
+### Objects
 
 ```js
 // literals
@@ -289,15 +289,31 @@ obj[key]    // bracket — dynamic/variable key
 obj.key     // wrong — literal 'key', not variable value
 
 // keys / values / entries / fromEntries
-Object.keys(obj)     // ['name', 'age', ...]
-Object.values(obj)   // ['Joey', 26, ...]
-Object.entries(obj)  // [['name','Joey'], ['age',26], ...]
-Object.fromEntries(pairs)  // reverse — pairs → object
+Object.keys(obj)          // own enumerable keys
+Object.values(obj)        // own enumerable values
+Object.entries(obj)       // [key, value] pairs
+Object.fromEntries(pairs) // reverse — pairs → object
 
 // transform pattern
 Object.fromEntries(
   Object.entries(obj).map(([k, v]) => [k, transform(v)])
 )
+
+// merge
+Object.assign({}, obj1, obj2)   // copies into {}, non-mutating
+const merged = { ...obj1, ...obj2 }  // cleaner syntax
+
+// freeze / seal
+Object.freeze(obj)  // no add/delete/modify (all silent)
+Object.seal(obj)    // no add/delete, modify ok
+
+// defineProperty
+Object.defineProperty(obj, 'key', {
+  value: 42,
+  writable: false,     // no reassign
+  enumerable: false,   // hidden from keys/spread/log
+  configurable: false, // no delete/reconfigure
+})
 ```
 
 ---

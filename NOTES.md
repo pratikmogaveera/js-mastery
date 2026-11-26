@@ -508,19 +508,57 @@ Object.keys(obj)    // array of own enumerable keys
 Object.values(obj)  // array of own enumerable values
 Object.entries(obj) // array of [key, value] pairs
 
-Object.fromEntries(pairs)  // [key, value] pairs → object (reverse of entries)
+Object.fromEntries(pairs)  // reverse — [key, value] pairs → object
 ```
 
-**Transform pattern:**
+**Transform pattern** — common interview pattern:
 ```js
 const doubled = Object.fromEntries(
   Object.entries({ a: 1, b: 2 }).map(([k, v]) => [k, v * 2])
 )  // { a: 2, b: 4 }
 ```
 
----
+#### Object.assign / spread / freeze / seal
 
-## Section 2 — Core Concepts
+```js
+// Object.assign — copies into target, mutates target
+const merged = Object.assign({}, obj1, obj2)  // {} prevents mutating obj1
+
+// spread merge — same result, cleaner
+const merged2 = { ...obj1, ...obj2 }
+
+// freeze — no add, delete, or modify
+Object.freeze(obj)
+obj.x = 1       // silently fails
+delete obj.x    // silently fails
+
+// seal — no add or delete, modify ok
+Object.seal(obj)
+obj.x = 1       // succeeds
+delete obj.x    // silently fails
+```
+
+#### Property descriptors
+
+```js
+Object.defineProperty(obj, 'key', {
+  value: 42,
+  writable: false,      // cannot reassign
+  enumerable: false,    // hidden from keys/entries/spread/console.log
+  configurable: false,  // cannot delete or reconfigure
+})
+
+obj.key = 99          // silently fails
+delete obj.key        // silently fails
+obj.key               // 42 — still accessible directly
+Object.keys(obj)      // key not listed
+```
+
+`defineProperty` = surgical per-property control.
+`freeze` = all flags false on every property.
+`seal` = configurable false on every property, writable unchanged.
+
+---
 
 ---
 
