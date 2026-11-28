@@ -340,6 +340,44 @@ delete obj.x     // true — key didn't exist (not false!)
 
 ---
 
+### Control Flow
+
+```js
+// for — index-based
+for (let i = 0; i < arr.length; i++) arr[i]
+
+// for...of — values (arrays, strings, Maps, Sets, iterables)
+for (const val of arr) val
+for (const val of Object.values(obj)) val  // iterate object values
+
+// for...in — enumerable keys (plain objects only)
+for (const key in obj) key
+// NEVER on arrays — string keys + inherited props
+
+// while / do...while
+while (cond) { }           // may not run
+do { } while (cond)        // always runs at least once
+
+// switch — falls through without break
+switch (val) {
+  case 1: ...; break
+  case 2: ...; break
+  default: ...
+}
+
+// labelled break — exit outer loop
+outerLoop: for (...) {
+  for (...) {
+    if (done) break outerLoop  // exits both loops
+  }
+}
+```
+
+**`for...in` on arrays:** keys are strings, not numbers — never use on arrays.
+**`for...of` on plain objects:** `TypeError — not iterable`. Use `Object.values(obj)`.
+
+---
+
 ### Strings
 
 #### Key rule — strings are immutable
