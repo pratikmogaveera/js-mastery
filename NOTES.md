@@ -665,6 +665,70 @@ function flattenObject(value, prefix) {
 
 ---
 
+### Control Flow
+
+#### for vs for...of vs for...in
+
+| | Iterates | Use for |
+|---|---|---|
+| `for` | index (manual) | arrays when index needed |
+| `for...of` | values | arrays, strings, Maps, Sets, any iterable |
+| `for...in` | own + inherited enumerable keys | plain objects only |
+
+**`for...in` on arrays — never do this:**
+- Keys are **strings** (`'0'`, `'1'`), not numbers
+- Inherited enumerable properties on `Array.prototype` show up too
+
+**`for...of` on plain objects — throws:**
+- Plain objects have no iterator — `TypeError: obj is not iterable`
+- Use `Object.values(obj)` with `for...of` to iterate values
+
+#### while vs do...while
+
+```js
+while (condition) { ... }   // checks before — may never run
+do { ... } while (condition) // checks after — always runs at least once
+```
+
+#### switch — fall-through
+
+Without `break`, execution continues into the next case after a match:
+
+```js
+switch (2) {
+  case 2: console.log('two')    // matches
+  case 3: console.log('three')  // also runs — no break
+  default: console.log('other') // also runs
+}
+// two, three, other
+```
+
+Always use `break` (or `return` inside a function) unless fall-through is intentional.
+
+#### Labelled break
+
+`break` and `continue` target the innermost loop by default. Labels let you exit an outer loop:
+
+```js
+outerLoop: for (let i = 0; i < 3; i++) {
+  for (let j = 0; j < 3; j++) {
+    if (found) break outerLoop  // exits both loops
+  }
+}
+```
+
+**Use case:** searching a 2D structure — once you find the value, stop all iteration.
+
+#### Q&A
+
+**Why is `for...in` dangerous on arrays?**
+Two reasons: keys are strings (`'0'`), not numbers — `key === 0` is `false`. And inherited enumerable properties on `Array.prototype` appear as keys too. Use `for...of` or a regular `for` loop on arrays.
+
+**What's the difference between `for...of` on an object vs `for...in`?**
+`for...of` on a plain object throws — objects are not iterable. `for...in` works on objects — it gives enumerable keys. Use `for (const val of Object.values(obj))` to iterate values.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---

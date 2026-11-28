@@ -97,7 +97,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: deep clone an object, check if two objects are equal, flatten a nested object_
   - _Resources: [javascript.info/object](https://javascript.info/object) · [javascript.info/property-descriptors](https://javascript.info/property-descriptors) · [javascript.info/object-methods](https://javascript.info/object-methods)_
 
-- [ ] **Control Flow**
+- [x] **Control Flow**
   - `for`, `for...of`, `for...in` — when to use which, gotchas with `for...in` on arrays
   - `while`, `do...while`
   - `switch` — fall-through, `break`, using with non-primitives
