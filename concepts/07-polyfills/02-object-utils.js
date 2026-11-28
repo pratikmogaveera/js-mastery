@@ -97,3 +97,33 @@ console.log(deepEqual({ a: { b: 1 } }, { a: { b: 2 } }))  // false
 console.log('L5 mixed nested:')
 console.log(deepEqual({ a: [1, 2], b: { c: 3 } }, { a: [1, 2], b: { c: 3 } }))  // true
 console.log(deepEqual({ a: [1, 2], b: { c: 3 } }, { a: [1, 3], b: { c: 3 } }))  // false
+
+
+// ─────────────────────────────────────────────
+// flattenObject — flatten nested object into dot-notation keys
+// { a: { b: { c: 1 }, d: 2 }, e: 3 } → { 'a.b.c': 1, 'a.d': 2, e: 3 }
+// ─────────────────────────────────────────────
+
+function flattenObject(value, prefix) {
+  const result = {}
+  if (typeof value !== 'object' || value === null) return value
+  Object.keys(value).forEach((key) => {
+    const fullKey = prefix ? `${prefix}.${key}` : key
+    const res = flattenObject(value[key], fullKey)
+    if (typeof res === 'object' && res !== null)
+      Object.assign(result, res)   // merge — don't nest the sub-result
+    else
+      result[fullKey] = res        // primitive — write directly
+  })
+  return result
+}
+
+console.log('flattenObject -----')
+const nested = {
+  a: { b: { c: 1 }, d: 2 },
+  e: 3,
+  f: { g: 4 },
+  h: null  // null — returns as-is, res !== null guard prevents Object.assign(result, null)
+}
+
+console.log(flattenObject(nested, '')) // { 'a.b.c': 1, 'a.d': 2, e: 3, 'f.g': 4, h: null }

@@ -71,7 +71,7 @@ Complete JavaScript mastery roadmap. Work through topics in order within each se
   - _Interview: implement `map`, `filter`, `reduce` from scratch (see Section 7 — Polyfills)_
   - _Resources: [javascript.info/array](https://javascript.info/array) · [javascript.info/array-methods](https://javascript.info/array-methods) · [MDN — Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)_
 
-- [ ] **Objects** 🎯
+- [x] **Objects** 🎯
   - Literals, shorthand properties, computed keys
   - Access: dot vs bracket notation
   - `Object.keys`, `Object.values`, `Object.entries`, `Object.fromEntries`

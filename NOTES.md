@@ -602,6 +602,69 @@ delete obj.x     // true  — key didn't exist, no error (not false!)
 
 ---
 
+### Object Polyfills
+
+#### deepClone
+
+```js
+function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') return obj  // null + primitives
+  if (Array.isArray(obj)) return obj.map(item => deepClone(item))  // arrays
+  const result = {}
+  Object.entries(obj).forEach(([k, v]) => result[k] = deepClone(v))
+  return result
+}
+```
+
+Limitations: does not handle `Date`, `RegExp`, `Map`, `Set`, or circular references. For those, use `structuredClone()`.
+
+#### deepEqual
+
+```js
+function deepEqual(x, y) {
+  if (typeof x !== typeof y) return false
+  if (x === null || y === null) return x === y  // null before object branch
+  if (Array.isArray(x) || Array.isArray(y)) {
+    if (!Array.isArray(x) || !Array.isArray(y)) return false
+    if (x.length !== y.length) return false
+    for (let i = 0; i < x.length; i++)
+      if (!deepEqual(x[i], y[i])) return false
+    return true
+  }
+  if (typeof x === 'object') {
+    if (Object.keys(x).length !== Object.keys(y).length) return false
+    for (const key of Object.keys(x))
+      if (!deepEqual(x[key], y[key])) return false
+    return true
+  }
+  return x === y
+}
+```
+
+#### flattenObject
+
+```js
+function flattenObject(value, prefix) {
+  const result = {}
+  if (typeof value !== 'object' || value === null) return value  // null + primitives
+  Object.keys(value).forEach(key => {
+    const fullKey = prefix ? `${prefix}.${key}` : key
+    const res = flattenObject(value[key], fullKey)
+    if (typeof res === 'object' && res !== null)
+      Object.assign(result, res)   // object — merge (not nest)
+    else
+      result[fullKey] = res        // primitive/null — write directly
+  })
+  return result
+}
+```
+
+**Key insight:** when recursive call returns an object, use `Object.assign` to merge its keys into the current result. Never assign the sub-object as a value — that nests instead of flattening.
+
+**null guard:** `res !== null` prevents `Object.assign(result, null)` which would throw. `null` is handled like a primitive.
+
+---
+
 ## Section 2 — Core Concepts
 
 ---
